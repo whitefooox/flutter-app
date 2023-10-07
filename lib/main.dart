@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:injector/injector.dart';
-import 'package:search3/app.dart';
+import 'package:search3/src/injection_container.dart';
+import 'package:search3/src/presentation/app.dart';
 
 void main() {
-  final injector = Injector.appInstance;
-
+  InjectorContainer();
   runApp(const App());
 }
