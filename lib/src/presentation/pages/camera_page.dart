@@ -27,7 +27,6 @@ class CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
   List<RecognizeResult>? classification;
   bool _isProcessing = false;
 
-  // init camera
   initCamera() {
     cameraController = CameraController(widget.camera, ResolutionPreset.medium,
         imageFormatGroup: Platform.isIOS
@@ -42,13 +41,12 @@ class CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
   }
 
   Future<void> imageAnalysis(CameraImage cameraImage) async {
-    // if image is still analyze, skip this frame
     if (_isProcessing) {
       return;
     }
     _isProcessing = true;
     classification = await recognizeUseCase
-        .call(InputImagePresenter.fromCameraImage(cameraImage));
+        .recognize(InputImagePresenter.fromCameraImage(cameraImage));
     _isProcessing = false;
     if (mounted) {
       setState(() {});
@@ -59,8 +57,7 @@ class CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
   void initState() {
     WidgetsBinding.instance.addObserver(this);
     initCamera();
-    //classificator.open();
-    //recognizeRepo.init();
+    recognizeUseCase.open();
     super.initState();
   }
 
@@ -83,22 +80,16 @@ class CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
     cameraController.dispose();
-    //classificator.close();
+    recognizeUseCase.close();
     super.dispose();
   }
 
   Widget cameraWidget(context) {
     var camera = cameraController.value;
-    // fetch screen size
     final size = MediaQuery.of(context).size;
 
-    // calculate scale depending on screen and camera ratios
-    // this is actually size.aspectRatio / (1 / camera.aspectRatio)
-    // because camera preview size is received as landscape
-    // but we're calculating for portrait orientation
     var scale = size.aspectRatio * camera.aspectRatio;
 
-    // to prevent scaling down, invert the value
     if (scale < 1) scale = 1 / scale;
 
     return Transform.scale(
@@ -137,7 +128,6 @@ class CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
               ]),
             ),
           ),
-        //ResultInfo(result: classification!.first)
       ]),
     );
   }

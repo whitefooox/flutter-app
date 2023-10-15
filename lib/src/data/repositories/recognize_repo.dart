@@ -14,4 +14,14 @@ class RecognizeRepo implements IRecognizeRepo {
     var reluts = await _classificator.recognize(inputImage);
     return Recognize.fromMap(reluts);
   }
+
+  @override
+  Future<void> close() async {
+    _classificator.close();
+  }
+
+  @override
+  Future<void> open() async {
+    _classificator.open();
+  }
 }

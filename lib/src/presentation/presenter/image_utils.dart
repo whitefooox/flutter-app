@@ -2,18 +2,16 @@ import 'package:camera/camera.dart';
 import 'package:image/image.dart' as image_lib;
 
 class ImageUtils {
-  // Converts a [CameraImage] in YUV420 format to [imageLib.Image] in RGB format
-  static image_lib.Image? convertCameraImage(CameraImage cameraImage) {
+  static image_lib.Image convertCameraImage(CameraImage cameraImage) {
     if (cameraImage.format.group == ImageFormatGroup.yuv420) {
       return convertYUV420ToImage(cameraImage);
     } else if (cameraImage.format.group == ImageFormatGroup.bgra8888) {
       return convertBGRA8888ToImage(cameraImage);
     } else {
-      return null;
+      throw Exception("Error camera format");
     }
   }
 
-  // Converts a [CameraImage] in BGRA888 format to [imageLib.Image] in RGB format
   static image_lib.Image convertBGRA8888ToImage(CameraImage cameraImage) {
     image_lib.Image img = image_lib.Image.fromBytes(
         width: cameraImage.planes[0].width!,
@@ -47,20 +45,13 @@ class ImageUtils {
 
         final yIndex = (h * yRowStride) + (w * yPixelStride);
 
-        // Y plane should have positive values belonging to [0...255]
         final int y = yBuffer[yIndex];
 
-        // U/V Values are subsampled i.e. each pixel in U/V chanel in a
-        // YUV_420 image act as chroma value for 4 neighbouring pixels
         final int uvIndex = (uvh * uvRowStride) + (uvw * uvPixelStride);
 
-        // U/V values ideally fall under [-0.5, 0.5] range. To fit them into
-        // [0, 255] range they are scaled up and centered to 128.
-        // Operation below brings U/V values to [-128, 127].
         final int u = uBuffer[uvIndex];
         final int v = vBuffer[uvIndex];
 
-        // Compute RGB values per formula above.
         int r = (y + v * 1436 / 1024 - 179).round();
         int g = (y - u * 46549 / 131072 + 44 - v * 93604 / 131072 + 91).round();
         int b = (y + u * 1814 / 1024 - 227).round();

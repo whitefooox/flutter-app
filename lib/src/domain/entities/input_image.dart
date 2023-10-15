@@ -1,5 +1,7 @@
-class InputImage {
-  List<List<List<num>>> pixels;
+import 'dart:typed_data';
 
-  InputImage(this.pixels);
+class InputImage {
+  ByteBuffer buffer;
+
+  InputImage(this.buffer);
 }

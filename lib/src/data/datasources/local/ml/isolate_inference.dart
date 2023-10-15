@@ -1,5 +1,5 @@
 import 'dart:isolate';
-import 'package:search3/src/data/datasources/local/ml/output_list.dart';
+import 'dart:typed_data';
 import 'package:search3/src/domain/entities/input_image.dart';
 import 'package:tflite_flutter/tflite_flutter.dart';
 
@@ -22,43 +22,46 @@ class IsolateInference {
     _receivePort.close();
   }
 
+  static Map<String, double> _getClassification(InferenceModel isolateModel) {
+    final result = isolateModel.outputBuffer.asUint8List();
+    int maxScore = result.reduce((a, b) => a + b);
+    var classification = <String, double>{};
+    for (var i = 0; i < result.length; i++) {
+      if (result[i] != 0) {
+        classification[isolateModel.labels[i]] =
+            result[i].toDouble() / maxScore.toDouble();
+      }
+    }
+    return classification;
+  }
+
   static void entryPoint(SendPort sendPort) async {
     final port = ReceivePort();
     sendPort.send(port.sendPort);
 
     await for (final InferenceModel isolateModel in port) {
-      // Set tensor input [1, 224, 224, 3]
-      final input = [isolateModel.inputImage.pixels];
-      // Set tensor output [1, 1001]
-      final output = isolateModel.outputList.data;
-      // // Run inference
+      final input = isolateModel.inputImage.buffer;
+      final output = isolateModel.outputBuffer;
+
       Interpreter interpreter =
           Interpreter.fromAddress(isolateModel.interpreterAddress);
       interpreter.run(input, output);
-      // Get first output tensor
-      final result = output.first;
-      int maxScore = result.reduce((a, b) => a + b);
-      // Set classification map {label: points}
-      var classification = <String, double>{};
-      for (var i = 0; i < result.length; i++) {
-        if (result[i] != 0) {
-          // Set label: points
-          classification[isolateModel.labels[i]] =
-              result[i].toDouble() / maxScore.toDouble();
-        }
-      }
-      isolateModel.responsePort.send(classification);
+
+      isolateModel.responsePort.send(_getClassification(isolateModel));
     }
   }
 }
 
 class InferenceModel {
   InputImage inputImage;
-  OutputList outputList;
+  int outputSize;
   int interpreterAddress;
   List<String> labels;
   late SendPort responsePort;
+  late ByteBuffer outputBuffer;
 
   InferenceModel(
-      this.inputImage, this.outputList, this.interpreterAddress, this.labels);
+      this.inputImage, this.outputSize, this.interpreterAddress, this.labels) {
+    outputBuffer = ByteData(outputSize).buffer;
+  }
 }

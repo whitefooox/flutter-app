@@ -7,7 +7,15 @@ class RecognizeImageUseCase {
 
   RecognizeImageUseCase(this.recognizeRepo);
 
-  Future<List<RecognizeResult>> call(InputImage inputImage) {
+  Future<List<RecognizeResult>> recognize(InputImage inputImage) {
     return recognizeRepo.recognize(inputImage);
+  }
+
+  Future<void> open() async {
+    recognizeRepo.open();
+  }
+
+  Future<void> close() async {
+    recognizeRepo.close();
   }
 }
