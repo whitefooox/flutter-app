@@ -40,6 +40,9 @@ dependencies:
   tflite_flutter: ^0.10.2
   camera: ^0.10.5+5
   injector: ^3.0.0
+  google_sign_in: ^6.1.5
+  firebase_auth: ^4.11.1
+  firebase_core: ^2.19.0
 
 dev_dependencies:
   flutter_test:
@@ -68,6 +71,8 @@ flutter:
     - assets/models/labels.txt
     - assets/models/labels_ru.txt
     - assets/models/mobilenet_quant.tflite
+    - assets/images/welcome.png
+    - assets/images/door.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
@@ -80,10 +85,10 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
+  fonts:
+    - family: Glasstown
+      fonts:
+      - asset: assets/fonts/Glasstown.ttf
   #       - asset: fonts/Schyler-Italic.ttf
   #         style: italic
   #   - family: Trajan Pro

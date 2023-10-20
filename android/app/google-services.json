@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "207913318063",
+    "project_id": "image-recognize-app",
+    "storage_bucket": "image-recognize-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:207913318063:android:2af9805627750077a3065a",
+        "android_client_info": {
+          "package_name": "com.whitefox.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "207913318063-maj9r99moigg4ja3srvqk7r626v3td4f.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.whitefox.app",
+            "certificate_hash": "d5e00c5f8a48c513f65f1f0ac62cfb61eb19a762"
+          }
+        },
+        {
+          "client_id": "207913318063-qt2rt2846h5h3tg4bgglnsp7f7v4vnld.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBkEho6ciICJHC3Gtgxpj6w4ES4DwP40Lc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "207913318063-qt2rt2846h5h3tg4bgglnsp7f7v4vnld.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
