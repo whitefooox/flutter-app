@@ -1,9 +1,9 @@
 import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injector/injector.dart';
-import 'package:search3/src/features/recognize/domain/entities/recognize_result.dart';
-import 'package:search3/src/features/recognize/domain/usecases/recognize_image_use_case.dart';
+import 'package:search3/src/features/recognize/presentation/bloc/recognize_bloc.dart';
 import 'package:search3/src/features/recognize/presentation/presenter/input_image_presenter.dart';
 
 final injector = Injector.appInstance;
@@ -21,10 +21,9 @@ class CameraPage extends StatefulWidget {
 }
 
 class CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
-  final recognizeUseCase = injector.get<RecognizeImageUseCase>();
+  final recognizeBloc = RecognizeBloc();
 
   late CameraController cameraController;
-  List<RecognizeResult>? classification;
   bool _isProcessing = false;
 
   initCamera() {
@@ -45,8 +44,8 @@ class CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
       return;
     }
     _isProcessing = true;
-    classification = await recognizeUseCase
-        .recognize(InputImagePresenter.fromCameraImage(cameraImage));
+    final inputImage = InputImagePresenter.fromCameraImage(cameraImage);
+    recognizeBloc.add(RecognizeRunServiceEvent(inputImage));
     _isProcessing = false;
     if (mounted) {
       setState(() {});
@@ -57,8 +56,8 @@ class CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
   void initState() {
     WidgetsBinding.instance.addObserver(this);
     initCamera();
-    recognizeUseCase.open();
     super.initState();
+    recognizeBloc.add(RecognizeOpenServiceEvent());
   }
 
   @override
@@ -80,7 +79,7 @@ class CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
     cameraController.dispose();
-    recognizeUseCase.close();
+    recognizeBloc.add(RecognizeCloseServiceEvent());
     super.dispose();
   }
 
@@ -102,33 +101,41 @@ class CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Stack(children: [
-        SizedBox(
-          child: (!cameraController.value.isInitialized)
-              ? Container()
-              : cameraWidget(context),
-        ),
-        if (classification != null)
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: SingleChildScrollView(
-              child: Column(children: [
-                Container(
-                  padding: const EdgeInsets.all(8),
-                  color: Colors.white,
-                  child: Row(
-                    children: [
-                      Text(classification!.first.name),
-                      const Spacer(),
-                      Text("${classification!.first.getPercent()}%")
-                    ],
+    return BlocProvider(
+      create: (context) => RecognizeBloc(),
+      child: SafeArea(
+        child: BlocBuilder<RecognizeBloc, RecognizeState>(
+          bloc: recognizeBloc,
+          builder: (context, state) {
+            return Stack(children: [
+              SizedBox(
+                child: (!cameraController.value.isInitialized)
+                    ? Container()
+                    : cameraWidget(context),
+              ),
+              if (!state.isProcessing && state.results.isNotEmpty)
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: SingleChildScrollView(
+                    child: Column(children: [
+                      Container(
+                        padding: const EdgeInsets.all(8),
+                        color: Colors.white,
+                        child: Row(
+                          children: [
+                            Text(state.results.first.name),
+                            const Spacer(),
+                            Text("${state.results.first.getPercent()}%")
+                          ],
+                        ),
+                      ),
+                    ]),
                   ),
                 ),
-              ]),
-            ),
-          ),
-      ]),
+            ]);
+          },
+        ),
+      ),
     );
   }
 }
