@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:injector/injector.dart';
 import 'package:search3/src/features/recognize/domain/entities/recognize_result.dart';
 import 'package:search3/src/features/recognize/domain/usecases/recognize_image_use_case.dart';
-import 'package:search3/src/features/recognize/presentation/colors/colors.dart';
+import 'package:search3/src/core/presentation/colors/colors.dart';
 import 'package:search3/src/features/recognize/presentation/presenter/input_image_presenter.dart';
 import 'package:search3/src/features/recognize/presentation/widgets/result_info.dart';
 
