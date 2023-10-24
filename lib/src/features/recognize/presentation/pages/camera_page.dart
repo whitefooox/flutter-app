@@ -47,9 +47,6 @@ class CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
     final inputImage = InputImagePresenter.fromCameraImage(cameraImage);
     recognizeBloc.add(RecognizeRunServiceEvent(inputImage));
     _isProcessing = false;
-    if (mounted) {
-      setState(() {});
-    }
   }
 
   @override
@@ -113,7 +110,7 @@ class CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
                     ? Container()
                     : cameraWidget(context),
               ),
-              if (!state.isProcessing && state.results.isNotEmpty)
+              if (state.results.isNotEmpty)
                 Align(
                   alignment: Alignment.bottomCenter,
                   child: SingleChildScrollView(

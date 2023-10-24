@@ -33,8 +33,7 @@ class RecognizeBloc extends Bloc<RecognizeEvent, RecognizeState> {
   _runService(
       RecognizeRunServiceEvent event, Emitter<RecognizeState> emit) async {
     if (!state.isStarted) return;
-    emit(state.copyWith(isProcessing: true, state: "process", results: []));
-    await Future.delayed(Duration(seconds: 3));
+    emit(state.copyWith(isProcessing: true, state: "process"));
     List<RecognizeResult> results =
         await _recognizeService.recognize(event.inputImage);
     emit(
