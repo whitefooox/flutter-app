@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injector/injector.dart';
 import 'package:search3/src/features/recognize/presentation/bloc/recognize_bloc.dart';
-import 'package:search3/src/features/recognize/presentation/presenter/input_image_presenter.dart';
 
 final injector = Injector.appInstance;
 
@@ -26,16 +25,31 @@ class CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
   late CameraController cameraController;
   bool _isProcessing = false;
 
-  initCamera() {
+  @override
+  void initState() {
+    WidgetsBinding.instance.addObserver(this);
+    initCamera();
+    super.initState();
+    recognizeBloc.add(RecognizeOpenServiceEvent());
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    cameraController.dispose();
+    recognizeBloc.add(RecognizeCloseServiceEvent());
+    super.dispose();
+  }
+
+  void initCamera() {
     cameraController = CameraController(widget.camera, ResolutionPreset.medium,
         imageFormatGroup: Platform.isIOS
             ? ImageFormatGroup.bgra8888
             : ImageFormatGroup.yuv420);
-    cameraController.initialize().then((value) {
-      cameraController.startImageStream(imageAnalysis);
-      if (mounted) {
-        setState(() {});
-      }
+    cameraController.initialize().then((_) async {
+      if (!mounted) return;
+      await cameraController.startImageStream(imageAnalysis);
+      setState(() {});
     });
   }
 
@@ -44,17 +58,8 @@ class CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
       return;
     }
     _isProcessing = true;
-    final inputImage = InputImagePresenter.fromCameraImage(cameraImage);
-    recognizeBloc.add(RecognizeRunServiceEvent(inputImage));
+    recognizeBloc.add(RecognizeImageFromCameraEvent(cameraImage));
     _isProcessing = false;
-  }
-
-  @override
-  void initState() {
-    WidgetsBinding.instance.addObserver(this);
-    initCamera();
-    super.initState();
-    recognizeBloc.add(RecognizeOpenServiceEvent());
   }
 
   @override
@@ -72,18 +77,9 @@ class CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
     }
   }
 
-  @override
-  void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
-    cameraController.dispose();
-    recognizeBloc.add(RecognizeCloseServiceEvent());
-    super.dispose();
-  }
-
   Widget cameraWidget(context) {
-    var camera = cameraController.value;
+    final camera = cameraController.value;
     final size = MediaQuery.of(context).size;
-
     var scale = size.aspectRatio * camera.aspectRatio;
 
     if (scale < 1) scale = 1 / scale;
@@ -120,9 +116,9 @@ class CameraPageState extends State<CameraPage> with WidgetsBindingObserver {
                         color: Colors.white,
                         child: Row(
                           children: [
-                            Text(state.results.first.name),
+                            Text(state.results.first.label),
                             const Spacer(),
-                            Text("${state.results.first.getPercent()}%")
+                            Text("${state.results.first.percent}%")
                           ],
                         ),
                       ),

@@ -7,21 +7,22 @@ import 'package:search3/src/features/recognize/domain/entities/input_image.dart'
 import 'package:search3/src/features/recognize/presentation/presenter/image_utils.dart';
 
 class InputImagePresenter {
-  static image_lib.Image _getImage(String path) {
+  static image_lib.Image getImageFromPath(String path) {
     final imageData = File(path).readAsBytesSync();
     image_lib.Image image = image_lib.decodeImage(imageData)!;
     return image;
   }
 
+  static image_lib.Image getImageFromCameraImage(CameraImage cameraImage) {
+    return ImageUtils.convertCameraImage(cameraImage);
+  }
+
   static ByteBuffer _getPixels(image_lib.Image image) {
     final intList = List<int>.empty(growable: true);
-    for (var y = 0; y < image.height; y++) {
-      for (var x = 0; x < image.width; x++) {
-        final pixel = image.getPixel(x, y);
-        intList.add(pixel.r.toInt());
-        intList.add(pixel.g.toInt());
-        intList.add(pixel.b.toInt());
-      }
+    for (var pixel in image) {
+      intList.add(pixel.r.toInt());
+      intList.add(pixel.g.toInt());
+      intList.add(pixel.b.toInt());
     }
     ByteBuffer buffer = Uint8List.fromList(intList).buffer;
     return buffer;
@@ -36,18 +37,14 @@ class InputImagePresenter {
     );
   }
 
-  static InputImage fromPath(String path) {
-    var image = _getImage(path);
-    image = _resizeImage(image, 224, 224);
-    return InputImage(_getPixels(image));
+  static InputImage _createFromImage(
+      image_lib.Image image, int width, int height) {
+    return InputImage(buffer: _getPixels(image), width: width, height: height);
   }
 
-  static InputImage fromCameraImage(CameraImage cameraImage) {
-    var image = ImageUtils.convertCameraImage(cameraImage);
-    image = _resizeImage(image, 224, 224);
-    if (Platform.isAndroid) {
-      image = image_lib.copyRotate(image, angle: 90);
-    }
-    return InputImage(_getPixels(image));
+  static InputImage prepareImage(image_lib.Image image, int width, int height) {
+    final resizedImage = _resizeImage(image, width, height);
+    final inputImage = _createFromImage(resizedImage, width, height);
+    return inputImage;
   }
 }

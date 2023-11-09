@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:search3/src/features/recognize/domain/entities/recognize_result.dart';
-//import 'package:search3/src/domain/image_recognize/recognize_result.dart';
 
 class ResultInfo extends StatelessWidget {
   final RecognizeResult result;
@@ -36,7 +35,7 @@ class ResultInfo extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  "${result.name} (${result.getPercent()}%)",
+                  "${result.label} (${result.percent}%)",
                   style: const TextStyle(
                     fontSize: 14,
                   ),

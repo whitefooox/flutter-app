@@ -40,9 +40,6 @@ dependencies:
   tflite_flutter: ^0.10.2
   camera: ^0.10.5+5
   injector: ^3.0.0
-  google_sign_in: ^6.1.5
-  firebase_auth: ^4.11.1
-  firebase_core: ^2.19.0
   flutter_bloc: ^8.1.3
 
 dev_dependencies:

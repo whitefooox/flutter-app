@@ -1,7 +1,9 @@
 import 'dart:typed_data';
 
 class InputImage {
-  ByteBuffer buffer;
+  final ByteBuffer buffer;
+  final int width;
+  final int height;
 
-  InputImage(this.buffer);
+  InputImage({required this.buffer, required this.width, required this.height});
 }

@@ -6,8 +6,14 @@ class RecognizeOpenServiceEvent implements RecognizeEvent {}
 
 class RecognizeCloseServiceEvent implements RecognizeEvent {}
 
-class RecognizeRunServiceEvent implements RecognizeEvent {
-  final InputImage inputImage;
+class RecognizeImageFromGalleryEvent implements RecognizeEvent {
+  final String path;
 
-  RecognizeRunServiceEvent(this.inputImage);
+  RecognizeImageFromGalleryEvent(this.path);
+}
+
+class RecognizeImageFromCameraEvent implements RecognizeEvent {
+  final CameraImage cameraImage;
+
+  RecognizeImageFromCameraEvent(this.cameraImage);
 }

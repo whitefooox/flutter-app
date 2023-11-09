@@ -4,7 +4,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:search3/src/core/presentation/colors/colors.dart';
 import 'package:search3/src/features/recognize/presentation/bloc/recognize_bloc.dart';
-import 'package:search3/src/features/recognize/presentation/presenter/input_image_presenter.dart';
 import 'package:search3/src/features/recognize/presentation/widgets/result_info.dart';
 
 class GalleryPage extends StatefulWidget {
@@ -18,7 +17,6 @@ class GalleryPage extends StatefulWidget {
 
 class _GalleryPageState extends State<GalleryPage> {
   final recognizeBloc = RecognizeBloc();
-
   String? _imagePath;
 
   Future<void> _pickImage() async {
@@ -47,8 +45,7 @@ class _GalleryPageState extends State<GalleryPage> {
   }
 
   Future<void> _processImage() async {
-    final inputImage = InputImagePresenter.fromPath(_imagePath!);
-    recognizeBloc.add(RecognizeRunServiceEvent(inputImage));
+    recognizeBloc.add(RecognizeImageFromGalleryEvent(_imagePath!));
   }
 
   @override

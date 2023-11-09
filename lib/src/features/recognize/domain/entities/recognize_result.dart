@@ -1,10 +1,8 @@
 class RecognizeResult {
-  final String name;
-  final double probability;
+  final String label;
+  final double confidence;
 
-  RecognizeResult(this.name, this.probability);
+  RecognizeResult({required this.label, required this.confidence});
 
-  double getPercent() {
-    return double.parse((probability * 100).toStringAsFixed(2));
-  }
+  double get percent => confidence * 100;
 }

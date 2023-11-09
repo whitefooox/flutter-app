@@ -18,14 +18,14 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   int _selectedIndex = 0;
   late CameraDescription cameraDescription;
-  bool cameraIsAvailable = Platform.isAndroid || Platform.isIOS;
+  bool isCameraAvailable = Platform.isAndroid || Platform.isIOS;
   final List<Widget> _pages = [const GalleryPage()];
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      if (cameraIsAvailable) {
+      if (isCameraAvailable) {
         cameraDescription = (await availableCameras()).first;
         _pages.add(CameraPage(camera: cameraDescription));
       }

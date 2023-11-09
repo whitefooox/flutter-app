@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:developer';
-import 'dart:io';
 import 'dart:isolate';
 import 'package:flutter/services.dart';
 import 'package:search3/src/features/recognize/data/datasources/local/ml/i_recognize_service.dart';
@@ -9,9 +8,11 @@ import 'package:tflite_flutter/tflite_flutter.dart';
 
 import 'isolate_inference.dart';
 
+import 'package:search3/src/core/config/files.dart' as Files;
+
 class TFClassificator implements IRecognizeService {
-  static const modelPath = 'assets/models/mobilenet_quant.tflite';
-  static const labelsPath = 'assets/models/labels.txt';
+  static const modelPath = Files.MODEL_PATH;
+  static const labelsPath = Files.LABELS_PATH;
 
   late Interpreter interpreter;
   late List<String> labels;
@@ -19,18 +20,16 @@ class TFClassificator implements IRecognizeService {
   late Tensor inputTensor;
   late Tensor outputTensor;
 
+  @override
+  Future<void> open() async {
+    _loadLabels();
+    _loadModel();
+    isolateInference = IsolateInference();
+    await isolateInference.start();
+  }
+
   Future<void> _loadModel() async {
-    final options = InterpreterOptions();
-
-    if (Platform.isAndroid) {
-      options.addDelegate(XNNPackDelegate());
-    }
-
-    if (Platform.isIOS) {
-      options.addDelegate(GpuDelegate());
-    }
-
-    interpreter = await Interpreter.fromAsset(modelPath, options: options);
+    interpreter = await Interpreter.fromAsset(modelPath);
     inputTensor = interpreter.getInputTensors().first;
     outputTensor = interpreter.getOutputTensors().first;
 
@@ -38,16 +37,7 @@ class TFClassificator implements IRecognizeService {
   }
 
   Future<void> _loadLabels() async {
-    final labelTxt = await rootBundle.loadString(labelsPath);
-    labels = labelTxt.split('\n');
-  }
-
-  @override
-  Future<void> open() async {
-    _loadLabels();
-    _loadModel();
-    isolateInference = IsolateInference();
-    await isolateInference.start();
+    labels = (await rootBundle.loadString(labelsPath)).split('\n');
   }
 
   Future<Map<String, double>> _inference(InferenceModel inferenceModel) async {
@@ -68,5 +58,15 @@ class TFClassificator implements IRecognizeService {
   @override
   Future<void> close() async {
     isolateInference.close();
+  }
+
+  @override
+  int getHeight() {
+    return inputTensor.shape[2];
+  }
+
+  @override
+  int getWidth() {
+    return inputTensor.shape[1];
   }
 }
