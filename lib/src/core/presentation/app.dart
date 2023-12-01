@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:search3/src/core/presentation/pages/main_page.dart';
+import 'package:search3/src/core/router/app_router.dart';
 
 class App extends StatelessWidget {
   const App({super.key});
@@ -7,12 +7,11 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        theme: ThemeData(
-            colorScheme: ColorScheme.fromSeed(
-                seedColor: const Color.fromRGBO(100, 204, 197, 1)),
-            useMaterial3: true,
-            scaffoldBackgroundColor: Colors.white),
-        debugShowCheckedModeBanner: false,
-        home: const MainPage());
+      theme: ThemeData(
+        fontFamily: "Magic"
+      ),
+      initialRoute: AppRouter.initialRoute,
+      routes: AppRouter.routes,
+      debugShowCheckedModeBanner: false);
   }
 }

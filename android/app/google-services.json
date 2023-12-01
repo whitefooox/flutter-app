@@ -1,41 +1,41 @@
 {
   "project_info": {
-    "project_number": "207913318063",
-    "project_id": "image-recognize-app",
-    "storage_bucket": "image-recognize-app.appspot.com"
+    "project_number": "569098715582",
+    "project_id": "image-c7caf",
+    "storage_bucket": "image-c7caf.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:207913318063:android:2af9805627750077a3065a",
+        "mobilesdk_app_id": "1:569098715582:android:c48379f5129435585439ef",
         "android_client_info": {
           "package_name": "com.whitefox.app"
         }
       },
       "oauth_client": [
         {
-          "client_id": "207913318063-maj9r99moigg4ja3srvqk7r626v3td4f.apps.googleusercontent.com",
+          "client_id": "569098715582-i82f5vfr5iii7tt4eru2drrlhuf1mr6f.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.whitefox.app",
-            "certificate_hash": "d5e00c5f8a48c513f65f1f0ac62cfb61eb19a762"
+            "certificate_hash": "d16c0853eec923756b3bfc1d3e851408f4029f72"
           }
         },
         {
-          "client_id": "207913318063-qt2rt2846h5h3tg4bgglnsp7f7v4vnld.apps.googleusercontent.com",
+          "client_id": "569098715582-8u0mv78lbungdsgtiicvavm9u8ma3qii.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBkEho6ciICJHC3Gtgxpj6w4ES4DwP40Lc"
+          "current_key": "AIzaSyCmRFlfvlCjE6eJyQ0sdu_ZB8HMSNsZef0"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "207913318063-qt2rt2846h5h3tg4bgglnsp7f7v4vnld.apps.googleusercontent.com",
+              "client_id": "569098715582-8u0mv78lbungdsgtiicvavm9u8ma3qii.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
