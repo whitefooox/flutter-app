@@ -7,10 +7,12 @@ class MagicInputField extends StatefulWidget {
   final String placeholderText;
   final double textSize;
   final bool isSecret;
+  final Function(String) onChange;
 
   const MagicInputField({
     super.key,
     required this.placeholderText,
+    required this.onChange,
     this.width = double.maxFinite,
     this.height = 60,
     this.textSize = 24,
@@ -28,6 +30,7 @@ class _MagicInputFieldState extends State<MagicInputField> {
       width: widget.width,
       height: widget.height,
       child: TextField(
+        onChanged: (text) => widget.onChange(text),
         obscureText: widget.isSecret,
         textAlign: TextAlign.center,
         style: TextStyle(

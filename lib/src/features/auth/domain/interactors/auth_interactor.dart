@@ -7,11 +7,11 @@ class AuthInteractor {
 
   AuthInteractor(this._authService);
 
-  Future<bool> signUp(String email, String password){
+  Future<void> signUp(String email, String password){
     return _authService.signIn(User(email: email, password: password));
   }
 
-  Future<bool> signIn(String email, String password){
+  Future<void> signIn(String email, String password){
     return _authService.signUp(User(email: email, password: password));
   }
 }
