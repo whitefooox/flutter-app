@@ -2,14 +2,14 @@ import 'package:camera/camera.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injector/injector.dart';
 import 'package:search3/src/features/recognize/domain/entities/recognize_result.dart';
-import 'package:search3/src/features/recognize/domain/services/recognize_image_use_case.dart';
+import 'package:search3/src/features/recognize/domain/interactors/recognize_interactor.dart';
 import 'package:search3/src/features/recognize/presentation/presenter/input_image_presenter.dart';
 
 part 'recognize_event.dart';
 part 'recognize_state.dart';
 
 class RecognizeBloc extends Bloc<RecognizeEvent, RecognizeState> {
-  final _recognizeService = Injector.appInstance.get<RecognizeService>();
+  final _recognizeService = Injector.appInstance.get<RecognizeInteractor>();
 
   RecognizeBloc() : super(RecognizeState()) {
     on<RecognizeOpenServiceEvent>(_openService);

@@ -3,7 +3,7 @@ import 'package:search3/src/features/recognize/data/datasources/local/ml/i_recog
 import 'package:search3/src/features/recognize/data/datasources/local/ml/tf_classficator.dart';
 import 'package:search3/src/features/recognize/data/repositories/recognize_repo.dart';
 import 'package:search3/src/features/recognize/domain/dependencies/i_recognize_repo.dart';
-import 'package:search3/src/features/recognize/domain/services/recognize_image_use_case.dart';
+import 'package:search3/src/features/recognize/domain/interactors/recognize_interactor.dart';
 
 final injector = Injector.appInstance;
 
@@ -15,8 +15,8 @@ void injectRecognize() {
     final recognizeService = injector.get<IRecognizeService>();
     return RecognizeRepo(recognizeService);
   });
-  injector.registerDependency<RecognizeService>(() {
+  injector.registerDependency<RecognizeInteractor>(() {
     final recognizeRepo = injector.get<RecognizeRepository>();
-    return RecognizeService(recognizeRepo);
+    return RecognizeInteractor(recognizeRepo);
   });
 }

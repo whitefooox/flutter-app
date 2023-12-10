@@ -15,32 +15,22 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   Future<void> _signUp(SignUpEvent event, Emitter<AuthState> emit) async {
-
+    emit(LoadingAuthState());
+    try {
+      await _authInteractor.signUp(event.email, event.password);
+      emit(AuthenticatedState());
+    } on AuthException catch(exception) {
+      emit(ErrorAuthState(message: exception.message));
+    }
   }
 
   Future<void> _signIn(SignInEvent event, Emitter<AuthState> emit) async {
     emit(LoadingAuthState());
     try {
       await _authInteractor.signIn(event.email, event.password);
+      emit(AuthenticatedState());
     } on AuthException catch(exception) {
       emit(ErrorAuthState(message: exception.message));
     }
   }
-
-  // Stream<AuthState> mapEventToState(AuthEvent event) async* {
-  //   if(event is SignUpEvent){
-  //     yield LoadingAuthState();
-  //     try {
-  //       final isAuthenticated = await _authInteractor.signUp(event.email, event.password);
-  //       if(isAuthenticated){
-  //         yield AuthenticatedState();
-  //       } else {
-  //         yield UnauthenticatedState();
-  //       }
-  //     } catch (e) {
-  //       yield ErrorAuthState(message: "catch state");
-  //     }
-  //   }
-  // }
-  
 }

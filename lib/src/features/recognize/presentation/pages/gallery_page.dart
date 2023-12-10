@@ -80,9 +80,9 @@ class _GalleryPageState extends State<GalleryPage> {
                       onPressed: _pickImage,
                       style: const ButtonStyle(
                           backgroundColor: MaterialStatePropertyAll(
-                              DarkColors.backgroundColor),
+                              AppColors.mainColor),
                           iconColor: MaterialStatePropertyAll(
-                              DarkColors.selectedColor)),
+                              AppColors.textColor)),
                       child: const Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [

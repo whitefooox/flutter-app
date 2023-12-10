@@ -29,7 +29,7 @@ class FirebaseAuthService implements IAuthService {
       }
     }
     catch (e) {
-      throw AuthException(e.toString());
+      throw AuthException("Unknown error");
     }
   }
   
@@ -40,9 +40,23 @@ class FirebaseAuthService implements IAuthService {
         email: user.email,
         password: user.password,
       );
-      //return true;
-    } catch (e) {
-      //return false;
+    }
+    on FirebaseAuthException catch (exception){
+      switch (exception.code) {
+        case "email-already-in-use":
+          throw AuthException("Email already in us");
+        case "invalid-email":
+          throw AuthException("Invalid email");
+        case "operation-not-allowed":
+          throw AuthException("Operation not allowed");
+        case "weak-password":
+          throw AuthException("Weak password");
+        default:
+          throw AuthException("Something broke...");
+      }
+    }
+    catch (e) {
+      throw AuthException("Unknown error");
     }
   }
   

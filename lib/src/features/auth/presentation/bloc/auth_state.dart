@@ -6,8 +6,6 @@ class InitialAuthState implements AuthState {}
 
 class AuthenticatedState implements AuthState {}
 
-class UnauthenticatedState implements AuthState {}
-
 class LoadingAuthState implements AuthState {}
 
 class ErrorAuthState extends AuthState {

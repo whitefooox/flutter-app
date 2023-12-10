@@ -16,7 +16,7 @@ class AppRouter {
   static void go(BuildContext context, String path){
     switch (path) {
       case "/main":
-        Navigator.pushNamedAndRemoveUntil(context, path, (route) => false);
+        Navigator.pushNamedAndRemoveUntil(context, path, (route) => route.settings.name == "/");
         break;
       default:
         Navigator.pushNamed(context, path);

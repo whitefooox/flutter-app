@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:search3/src/core/config/files.dart';
 import 'package:search3/src/core/router/app_router.dart';
 import 'package:search3/src/features/auth/presentation/widgets/magic_button.dart';
 
 class AuthPage extends StatelessWidget {
-
-  final String backgroundImagePath = "assets/images/auth_background.jpg";
-  final String rabbitImagePath = "assets/images/auth_test.png";
 
   const AuthPage({super.key});
 
@@ -19,7 +17,7 @@ class AuthPage extends StatelessWidget {
           padding: const EdgeInsets.only(left: 50, right: 50),
           decoration: BoxDecoration(
             image: DecorationImage(
-              image: Image.asset(backgroundImagePath).image,
+              image: Image.asset(AUTH_BACKGROUND_IMAGE_PATH).image,
               fit: BoxFit.fill
             )
           ),
@@ -37,7 +35,7 @@ class AuthPage extends StatelessWidget {
               ),
               const SizedBox(height: 20,),
               Image.asset(
-                rabbitImagePath,
+                AUTH_RABBIT_IMAGE_PATH,
                 width: 200,
                 height: 200,
               ),

@@ -49,8 +49,9 @@ class _MainPageState extends State<MainPage> {
             BottomNavigationBarItem(
                 icon: Icon(Icons.camera_alt), label: "Camera"),
           ],
-          backgroundColor: DarkColors.backgroundColor,
-          selectedItemColor: DarkColors.selectedColor,
+          backgroundColor: AppColors.mainColor,
+          selectedItemColor: AppColors.textColor,
+          unselectedItemColor: AppColors.backgroundColor,
           currentIndex: _selectedIndex,
           onTap: _onTap,
           showSelectedLabels: false,
